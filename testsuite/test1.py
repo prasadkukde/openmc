@@ -48,7 +48,7 @@ tally_truth.filters = [openmc.MeshFilter(mesh)]
 tally_truth.scores = ['absorption']
 tally_truth.nuclides = ['U238']
 
-zernike_filter= openmc.ZernikeRadialFilter(order=20,r=r_fuel)
+zernike_filter= openmc.ZernikeRadialFilter(order=50,r=r_fuel)
 
 tally_zernike=openmc.Tally(name='zernike_tally')
 tally_zernike.filters= [zernike_filter]
