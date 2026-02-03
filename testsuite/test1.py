@@ -42,11 +42,18 @@ water_cell=openmc.Cell(region=water_region, fill=water)
 geom=openmc.Geometry([fuel_cell,water_cell])
 
 mesh = openmc.CylindricalMesh(r_grid=ring_radii,z_grid=[-1,1],phi_grid=[0,2*np.pi])
+mesh_filter=openmc.MeshFilter(mesh)
 
 tally_truth = openmc.Tally(name='tally_truth')
-tally_truth.filters = [openmc.MeshFilter(mesh)]
+tally_truth.filters = [mesh_filter]
 tally_truth.scores = ['absorption']
 tally_truth.nuclides = ['U238']
+
+tally_col=openmc.Tally(name='tally_col')
+tally_col.filters=[mesh_filter]
+tally_col.scores=['absorption']
+tally_col.nuclides=['U238']
+tally_col.estimator='collision'
 
 zernike_filter= openmc.ZernikeRadialFilter(order=50,r=r_fuel)
 
@@ -56,13 +63,13 @@ tally_zernike.scores=['absorption']
 tally_zernike.nuclides=['U238']
 
 
-tallies = openmc.Tallies([tally_truth, tally_zernike])
+tallies = openmc.Tallies([tally_truth, tally_zernike, tally_col])
 
 
 settings=openmc.Settings()
 settings.batches=50
 settings.inactive=10
-settings.particles=5000
+settings.particles=50000
 settings.source= openmc.Source(space=box)
 
 model=openmc.Model(materials=mats, geometry=geom, settings=settings, tallies=tallies)

@@ -32,7 +32,7 @@
   </geometry>
   <settings>
     <run_mode>eigenvalue</run_mode>
-    <particles>5000</particles>
+    <particles>50000</particles>
     <batches>50</batches>
     <inactive>10</inactive>
     <source type="independent" strength="1.0" particle="neutron">
@@ -62,10 +62,16 @@
       <nuclides>U238</nuclides>
       <scores>absorption</scores>
     </tally>
-    <tally id="2" name="zernike_tally">
+    <tally id="3" name="zernike_tally">
       <filters>2</filters>
       <nuclides>U238</nuclides>
       <scores>absorption</scores>
+    </tally>
+    <tally id="2" name="tally_col">
+      <filters>1</filters>
+      <nuclides>U238</nuclides>
+      <scores>absorption</scores>
+      <estimator>collision</estimator>
     </tally>
   </tallies>
 </model>

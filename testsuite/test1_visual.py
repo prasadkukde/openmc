@@ -9,6 +9,8 @@ truth_normalized=truth_scores/np.mean(truth_scores)
 
 t_zernike=sp.get_tally(name='zernike_tally')
 zn_coeffs=t_zernike.mean.flatten()
+print(len(zn_coeffs))
+print(type(zn_coeffs))
 
 
 r_max=0.392
@@ -26,7 +28,12 @@ for i in range(N_rings):
     r_midpoints.append((radii[i]+radii[i+1])/2)
 
 r_grid=np.linspace(0,r_max,100)
+print(len(r_grid))
+print(type(r_grid))
+
 zn_curve=zernike_func(r_grid)
+print(len(zn_curve))
+print(type(zn_curve))
 
 zn_curve=np.array(zn_curve)
 zn_normalized=zn_curve/np.mean(zn_curve)
@@ -34,7 +41,7 @@ zn_normalized=zn_curve/np.mean(zn_curve)
 print("Plotting results...")
 plt.figure(figsize=(10,6))
 
-plt.plot(r_midpoints, truth_normalized, 'o', color='grey',label='Ground Truth (Tracklength)', markersize=8)
+plt.plot(radii[1:], truth_normalized, 'o', color='grey',label='Ground Truth (Tracklength)', markersize=8)
 plt.plot(r_grid, zn_normalized, '-', color='red', linewidth=2,label='Zernike Reconstrution (Order 20)')
 
 plt.xlabel('Radial Position (cm)', fontsize=12)

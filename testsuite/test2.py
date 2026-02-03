@@ -6,8 +6,12 @@ import numpy as np
 sp = openmc.StatePoint('statepoint.50.h5')
 t_truth = sp.get_tally(name='tally_truth')
 truth_scores = t_truth.mean.flatten()
+
 t_zernike = sp.get_tally(name='zernike_tally')
 zn_coeffs = t_zernike.mean.flatten()
+
+t_col=sp.get_tally(name='tally_col')
+col_scores=t_col.mean.flatten()
 
 # 2. Physics Constants
 r_max = 0.392
@@ -15,7 +19,8 @@ r_max = 0.392
 total_neutrons_truth = np.sum(truth_scores)
 # Target Value (The fraction of neutrons in the last ring)
 truth_fraction_last_ring = truth_scores[-1] / total_neutrons_truth
-
+col_fraction=col_scores[-1]/np.sum(col_scores)
+baseline_error=abs(col_fraction-truth_fraction_last_ring)/truth_fraction_last_ring
 # 3. Calculation Loop
 errors = []
 terms = range(1, len(zn_coeffs) + 1)
@@ -50,9 +55,12 @@ for i in terms:
     err = abs(zernike_fraction_last_ring - truth_fraction_last_ring) / truth_fraction_last_ring
     errors.append(err)
 
+
+
 # 4. Plot
 plt.figure(figsize=(10,6))
-plt.semilogy(terms, errors, 'o', color='orange', label='Zernike Convergence', markersize=10)
+plt.semilogy(terms, errors, 'o', color='orange', label='ZN vs TKL', markersize=10)
+plt.axhline(y=baseline_error,color='green',label='COL vs TKL',markersize=10)
 plt.xlabel('Number of Terms', fontsize=12)
 plt.ylabel('Relative Error (Log Scale)', fontsize=12)
 plt.title('Convergence of Zernike Method (Area Matched)', fontsize=14)
